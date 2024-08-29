@@ -2,9 +2,10 @@
 
 const express = require("express");
 const router = express.Router();
-const { getTasks } = require("../controllers/taskController");
+const { getTasks, calculate } = require("../controllers/taskController");
 
-// Define the GET /tasks endpoint
 router.get("/tasks", getTasks);
+
+router.post("/calculate/create", calculate);
 
 module.exports = router;
