@@ -1,15 +1,20 @@
-// server.js
-
 const express = require("express");
-const app = express();
-const port = 3002;
-const taskRoutes = require("./routes/taskRoutes");
+const dotenv = require("dotenv");
+const cors = require("cors");
 
-// Middleware to parse JSON requests
+dotenv.config();
+const app = express();
+const port = process.env.PORT || 3000;
+const taskRoutes = require("./routes/taskRoutes");
+const healthRoutes = require("./routes/healthRoutes");
+
 app.use(express.json());
 
-// Use the task routes
-app.use(taskRoutes);
+app.use(cors());
+
+app.use("/api/v1", taskRoutes);
+
+app.use("/api/v1", healthRoutes);
 
 // Start the server
 app.listen(port, () => {
