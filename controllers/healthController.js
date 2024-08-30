@@ -2,7 +2,6 @@
 
 // Function to handle GET /api/v1/health
 const getHealth = (req, res) => {
-  res.setHeader("Content-Type", "application/json");
   const response = {
     message: "ping successful",
     status: 200,
@@ -23,7 +22,6 @@ const postHealth = (req, res) => {
     });
   }
 
-  res.setHeader("Content-Type", "application/json");
   const response = {
     status: 201,
     message: "ping successful",
