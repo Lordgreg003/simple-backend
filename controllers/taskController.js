@@ -1,4 +1,6 @@
 // controllers/taskController.js
+const taSkModel = require("../model/taskModel");
+const asyncHandler = require("express-async-handler");
 
 // Function to handle GET /tasks
 const getTasks = (req, res) => {
@@ -38,4 +40,80 @@ const calculate = (req, res) => {
   res.status(200).json(response);
 };
 
-module.exports = { getTasks, calculate };
+const searchArray = (req, res) => {
+  // Predefined array
+  const animals = ["cat", "dog", "sheep", "goat", "cow"];
+
+  // Extract the search query from the request
+  const searchQuery = req.query.search;
+
+  // Find the index of the search value
+  const searchIndex = animals.indexOf(searchQuery);
+
+  // If the value is found, return the index and value
+  if (searchIndex !== -1) {
+    res.status(200).json({
+      message: "search was successful",
+      Status: 200,
+      Data: {
+        search_index: searchIndex,
+        search_value: searchQuery,
+      },
+    });
+  } else {
+    // If the value is not found, return an error message
+    res.status(404).json({
+      message: "Value not found in the array",
+      Status: 404,
+      Data: null,
+    });
+  }
+};
+
+const createTask = asyncHandler(async (req, res) => {
+  try {
+    const { title, description } = req.body;
+
+    const titleTaken = await taSkModel.findOne({
+      title: title.trim(),
+    });
+
+    if (titleTaken) {
+      res.status(400);
+      throw new Error("Title is taken");
+    }
+
+    const status = false;
+
+    const newTask = await taSkModel.create({
+      title: title.trim(),
+      description: description.trim(),
+      status: status,
+    });
+
+    if (!newTask) {
+      res.status(400);
+      throw new Error("Failed to create task");
+    } else {
+      res.status(201).json(newTask);
+    }
+  } catch (error) {
+    res.status(500);
+  }
+});
+
+const getTaskById = asyncHandler(async (req, res) => {
+  const check = await taSkModel.findById(req.params.id);
+  try {
+    if (!check) {
+      res.status(400);
+      throw new Error("id not found");
+    } else {
+      res.status(200).json(check);
+    }
+  } catch (error) {
+    res.status(500);
+  }
+});
+
+module.exports = { getTasks, calculate, searchArray, createTask, getTaskById };

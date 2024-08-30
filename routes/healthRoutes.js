@@ -8,6 +8,6 @@ const { getHealth, postHealth } = require("../controllers/healthController");
 router.get("/health", getHealth);
 
 // Define the POST /api/v1/health endpoint
-router.post("/health/create", postHealth);
+router.post("/health", postHealth);
 
 module.exports = router;
