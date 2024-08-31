@@ -4,6 +4,9 @@ const cors = require("cors");
 const connectDB = require("./config/db");
 
 dotenv.config();
+
+console.log("PORT:", process.env.PORT);
+console.log("MONGO_URI:", process.env.MONGO_URI);
 const app = express();
 connectDB();
 const taskRoutes = require("./routes/taskRoutes");
