@@ -3,7 +3,7 @@ const taSkModel = require("../model/taskModel");
 const asyncHandler = require("express-async-handler");
 
 // Function to handle GET /tasks
-const getTasks = (req, res) => {
+const getTaskss = (req, res) => {
   const response = {
     message: "retrieved successfully",
     status: 200,
@@ -116,4 +116,64 @@ const getTaskById = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { getTasks, calculate, searchArray, createTask, getTaskById };
+const updateTask = asyncHandler(async (req, res) => {
+  const check = await taSkModel.findById(req.params.id);
+
+  const { title, description, status } = req.body;
+  try {
+    if (!check) {
+      res.status(404);
+      throw new Error("Id not found");
+    }
+    const updatedTask = await taSkModel.findByIdAndUpdate(
+      req.params.id,
+      {
+        description: description.trim(),
+        title: title.trim(),
+        status: status,
+      },
+      {
+        new: true,
+      }
+    );
+    if (!updatedTodo) {
+      res.status(500);
+      throw new Error("todo could not be updated");
+    } else {
+      res.status(200).json(check);
+    }
+  } catch (error) {
+    res.status(500);
+    throw new Error(error);
+  }
+});
+
+const deleteTask = asyncHandler(async (req, res) => {
+  const check = await taSkModel.findById(req.params.id);
+  try {
+    if (!check) {
+      res.status(404);
+      throw new Error("Id not found");
+    }
+    const deleteTask = await taSkModel.findByIdAndDelete(req.params.id);
+    if (!deleteTodo) {
+      res.status(500);
+      throw new Error("could not delete todo");
+    } else {
+      res.status(200).json(check);
+    }
+  } catch (error) {
+    res.status(500);
+    throw new Error(error);
+  }
+});
+
+module.exports = {
+  getTaskss,
+  calculate,
+  searchArray,
+  createTask,
+  getTaskById,
+  updateTask,
+  deleteTask,
+};
