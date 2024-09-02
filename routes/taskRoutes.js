@@ -3,17 +3,17 @@
 const express = require("express");
 const router = express.Router();
 const {
-  getTaskss,
+  getTasks,
   calculate,
   searchArray,
-  getTasks,
+  getAllTasks,
   createTask,
   getTaskById,
-  updateTaskById,
-  deleteTaskById,
+  update,
+  deleteById,
 } = require("../controllers/taskController");
 
-router.get("/tasks", getTaskss);
+router.get("/taskss", getTasks);
 
 // Define the POST /api/v1/calculate endpoint
 router.post("/calculate", calculate);
@@ -23,9 +23,9 @@ router.get("/set", searchArray);
 
 // CRUD operations
 router.post("/tasks", createTask);
-router.get("/tasks", getTasks);
+router.get("/tasks", getAllTasks);
 router.get("/tasks/:id", getTaskById);
-router.put("/tasks/:id", updateTaskById);
-router.delete("/tasks/:id", deleteTaskById);
+router.put("/tasks/:id", update);
+router.delete("/tasks/:id", deleteById);
 
 module.exports = router;

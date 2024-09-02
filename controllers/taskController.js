@@ -3,7 +3,7 @@ const taSkModel = require("../model/taskModel");
 const asyncHandler = require("express-async-handler");
 
 // Function to handle GET /tasks
-const getTaskss = (req, res) => {
+const getTasks = (req, res) => {
   const response = {
     message: "retrieved successfully",
     status: 200,
@@ -79,8 +79,11 @@ const createTask = asyncHandler(async (req, res) => {
     });
 
     if (titleTaken) {
-      res.status(400);
-      throw new Error("Title is taken");
+      res.status(500).json({
+        status: 500,
+        message: "title already taken",
+      });
+      return;
     }
 
     const status = false;
@@ -92,8 +95,11 @@ const createTask = asyncHandler(async (req, res) => {
     });
 
     if (!newTask) {
-      res.status(400);
-      throw new Error("Failed to create task");
+      res.status(500).json({
+        status: 500,
+        message: "failed to create new task",
+      });
+      return;
     } else {
       res.status(201).json(newTask);
     }
@@ -103,11 +109,16 @@ const createTask = asyncHandler(async (req, res) => {
 });
 
 const getTaskById = asyncHandler(async (req, res) => {
-  const check = await taSkModel.findById(req.params.id);
   try {
+    const check = await taSkModel.findById(req.params.id);
+
+    console.log("check", check);
     if (!check) {
-      res.status(400);
-      throw new Error("id not found");
+      res.status(500).json({
+        status: 500,
+        message: "id not found",
+      });
+      return;
     } else {
       res.status(200).json(check);
     }
@@ -116,14 +127,17 @@ const getTaskById = asyncHandler(async (req, res) => {
   }
 });
 
-const updateTask = asyncHandler(async (req, res) => {
+const update = asyncHandler(async (req, res) => {
   const check = await taSkModel.findById(req.params.id);
 
   const { title, description, status } = req.body;
   try {
     if (!check) {
-      res.status(404);
-      throw new Error("Id not found");
+      res.status(500).json({
+        status: 500,
+        message: "id not found",
+      });
+      return;
     }
     const updatedTask = await taSkModel.findByIdAndUpdate(
       req.params.id,
@@ -136,9 +150,38 @@ const updateTask = asyncHandler(async (req, res) => {
         new: true,
       }
     );
-    if (!updatedTodo) {
-      res.status(500);
-      throw new Error("todo could not be updated");
+    if (!updatedTask) {
+      res.status(500).json({
+        status: 500,
+        message: "task not updated",
+      });
+      return;
+    } else {
+      res.status(200).json(updatedTask);
+    }
+  } catch (error) {
+    res.status(500);
+    throw new Error(error);
+  }
+});
+
+const deleteById = asyncHandler(async (req, res) => {
+  const check = await taSkModel.findById(req.params.id);
+  try {
+    if (!check) {
+      res.status(500).json({
+        status: 500,
+        message: "id not found",
+      });
+      return;
+    }
+    const deleteTask = await taSkModel.findByIdAndDelete(req.params.id);
+    if (!deleteTask) {
+      res.status(500).json({
+        status: 500,
+        message: "could not delete task",
+      });
+      return;
     } else {
       res.status(200).json(check);
     }
@@ -148,17 +191,16 @@ const updateTask = asyncHandler(async (req, res) => {
   }
 });
 
-const deleteTask = asyncHandler(async (req, res) => {
-  const check = await taSkModel.findById(req.params.id);
+const getAllTasks = asyncHandler(async (req, res) => {
+  const check = await taSkModel.find();
+
   try {
     if (!check) {
-      res.status(404);
-      throw new Error("Id not found");
-    }
-    const deleteTask = await taSkModel.findByIdAndDelete(req.params.id);
-    if (!deleteTodo) {
-      res.status(500);
-      throw new Error("could not delete todo");
+      res.status(500).json({
+        status: 500,
+        message: "tasks not found",
+      });
+      return;
     } else {
       res.status(200).json(check);
     }
@@ -169,11 +211,12 @@ const deleteTask = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
-  getTaskss,
+  getTasks,
+  getAllTasks,
   calculate,
   searchArray,
   createTask,
   getTaskById,
-  updateTask,
-  deleteTask,
+  update,
+  deleteById,
 };
