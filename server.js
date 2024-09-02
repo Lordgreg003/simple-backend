@@ -19,13 +19,14 @@ const swaggerFile = JSON.parse(rawData);
 
 const taskRoutes = require("./routes/taskRoutes");
 const healthRoutes = require("./routes/healthRoutes");
+const weatherRoutes = require("./routes/weatherRoutes");
 
 app.use(express.json());
 
 app.use(cors());
 
 app.use("/api/v1", taskRoutes);
-
+app.use("/api", weatherRoutes);
 app.use("/api/v1", healthRoutes);
 
 //swagger inititailization
