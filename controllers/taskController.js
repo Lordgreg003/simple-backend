@@ -4,6 +4,7 @@ const asyncHandler = require("express-async-handler");
 
 // Function to handle GET /tasks
 const getTasks = (req, res) => {
+  // #swagger.tags = ['tasks']
   const response = {
     message: "retrieved successfully",
     status: 200,
@@ -15,6 +16,7 @@ const getTasks = (req, res) => {
 
 // Function to handle POST /api/v1/calculate/1
 const calculate = (req, res) => {
+  // #swagger.tags = ['calculate']
   const { num1, num2 } = req.body;
 
   if (typeof num1 !== "number" || typeof num2 !== "number") {
@@ -41,6 +43,7 @@ const calculate = (req, res) => {
 };
 
 const searchArray = (req, res) => {
+  // #swagger.tags = ['set']
   // Predefined array
   const animals = ["cat", "dog", "sheep", "goat", "cow"];
 
@@ -71,6 +74,7 @@ const searchArray = (req, res) => {
 };
 
 const createTask = asyncHandler(async (req, res) => {
+  // #swagger.tags = ['tasks']
   try {
     const { title, description } = req.body;
 
@@ -109,6 +113,7 @@ const createTask = asyncHandler(async (req, res) => {
 });
 
 const getTaskById = asyncHandler(async (req, res) => {
+  // #swagger.tags = ['tasks']
   try {
     const check = await taSkModel.findById(req.params.id);
 
@@ -128,6 +133,7 @@ const getTaskById = asyncHandler(async (req, res) => {
 });
 
 const update = asyncHandler(async (req, res) => {
+  // #swagger.tags = ['tasks']
   const check = await taSkModel.findById(req.params.id);
 
   const { title, description, status } = req.body;
@@ -166,6 +172,7 @@ const update = asyncHandler(async (req, res) => {
 });
 
 const deleteById = asyncHandler(async (req, res) => {
+  // #swagger.tags = ['tasks']
   const check = await taSkModel.findById(req.params.id);
   try {
     if (!check) {
@@ -192,6 +199,7 @@ const deleteById = asyncHandler(async (req, res) => {
 });
 
 const getAllTasks = asyncHandler(async (req, res) => {
+  // #swagger.tags = ['tasks']
   const check = await taSkModel.find();
 
   try {

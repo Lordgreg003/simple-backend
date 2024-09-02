@@ -9,8 +9,13 @@ const cors = require("cors");
 const connectDB = require("./config/db");
 connectDB();
 
-console.log("PORT:", process.env.PORT);
-console.log("MONGO_URI:", process.env.MONGO_URI);
+// importing swagger ui
+const { readFileSync } = require("fs");
+const swaggerUi = require("swagger-ui-express");
+
+// Read the JSON file synchronously
+const rawData = readFileSync("./swagger/swagger_output.json", "utf-8");
+const swaggerFile = JSON.parse(rawData);
 
 const taskRoutes = require("./routes/taskRoutes");
 const healthRoutes = require("./routes/healthRoutes");
@@ -22,6 +27,9 @@ app.use(cors());
 app.use("/api/v1", taskRoutes);
 
 app.use("/api/v1", healthRoutes);
+
+//swagger inititailization
+app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 // Error Middlewares
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");

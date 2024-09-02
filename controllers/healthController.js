@@ -2,6 +2,7 @@
 
 // Function to handle GET /api/v1/health
 const getHealth = (req, res) => {
+  // #swagger.tags = ['health']
   const response = {
     message: "ping successful",
     status: 200,
@@ -13,6 +14,8 @@ const getHealth = (req, res) => {
 
 // Function to handle POST /api/v1/health
 const postHealth = (req, res) => {
+  // #swagger.tags = ['health']
+
   const { name, age } = req.body;
 
   if (!name || !age) {
