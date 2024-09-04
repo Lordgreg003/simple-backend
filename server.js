@@ -6,7 +6,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const cors = require("cors");
-const bodyParser = require("body-parser");
+// const bodyParser = require("body-parser");
 const connectDB = require("./config/db");
 connectDB();
 
@@ -25,8 +25,8 @@ const weatherRoutes = require("./routes/weatherRoutes");
 app.use(express.json());
 
 app.use(cors());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(bodyParser.json());
 app.use("/api/v1", taskRoutes);
 app.use("/api", weatherRoutes);
 app.use("/api/v1", healthRoutes);
