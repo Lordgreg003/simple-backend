@@ -28,7 +28,7 @@ app.use(cors());
 // app.use(bodyParser.urlencoded({ extended: true }));
 // app.use(bodyParser.json());
 app.use("/api/v1", taskRoutes);
-app.use("/api", weatherRoutes);
+app.use("/api/v1", weatherRoutes);
 app.use("/api/v1", healthRoutes);
 
 //swagger inititailization
